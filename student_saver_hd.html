@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Saver (All-in-one)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg: #f0e8ff;
+      --surface: #ffffff;
+      --primary: #6A0DAD;
+      --primary-dark: #4a0878;
+      --primary-darker: #300550;
+      --primary-soft: #f0e4ff;
+      --primary-mid: #c4a0f0;
+      --accent: #9b3ddb;
+      --accent-light: #b76ef0;
+      --text: #1a0336;
+      --muted: #7a5a9e;
+      --muted-light: #a98bc8;
+      --danger: #e53e3e;
+      --success: #0fa86e;
+      --border: #ddc8f8;
+      --border-strong: #b899e8;
+      --shadow-sm: 0 2px 8px rgba(106, 13, 173, 0.10);
+      --shadow: 0 8px 28px rgba(106, 13, 173, 0.16);
+      --shadow-lg: 0 20px 60px rgba(106, 13, 173, 0.22);
+      --shadow-glow: 0 0 30px rgba(154, 61, 219, 0.28);
+      --radius-sm: 10px;
+      --radius: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
+      --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(ellipse at 60% 0%, #e8d5ff 0%, #f0e8ff 50%, #ddd0f5 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      letter-spacing: -0.01em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ── APP SHELL ── */
+    .app {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.96);
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(20px);
+    }
+
+    .content {
+      padding: 20px 18px;
+      padding-bottom: 104px;
+    }
+
+    /* ── SPLASH ── */
+    .splash {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #8b1fe8 0%, #5a08a0 45%, #2d0455 100%);
+      color: #fff;
+      text-align: center;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .splash::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(180, 100, 255, 0.25) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      border-radius: 50%;
+    }
+
+    .splash::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(100, 20, 200, 0.3) 0%, transparent 70%);
+      bottom: -80px;
+      left: -80px;
+      border-radius: 50%;
+    }
+
+    .splash>section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo {
+      width: 88px;
+      height: 88px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      place-items: center;
+      display: flex;
+      justify-content: center;
+      font-size: 38px;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      border: 0;
+      border-radius: var(--radius);
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
+      transition: all var(--transition);
+      letter-spacing: -0.01em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0);
+      transition: background var(--transition);
+    }
+
+    .btn:hover::after {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 60%, var(--primary-dark) 100%);
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(106, 13, 173, 0.38);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 8px 28px rgba(106, 13, 173, 0.50);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.97);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #e4d0ff;
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-block {
+      width: 100%;
+      display: block;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(216, 196, 245, 0.6);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 12px rgba(106, 13, 173, 0.08);
+    }
+
+    .topbar h1 {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .brand-img-holder {
+      display: flex;
+      overflow: hidden;
+      height: 60px;
+      width: 60px;
+      border-radius: 16px;
+      border: 1px solid rgb(212, 212, 212);
+    }
+    
+    .brand-img-holder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* .brand-logo-emoji {
+      font-size: 28px;
+      line-height: 1;
+      display: inline-block;
+      filter: drop-shadow(0 2px 4px rgba(106, 13, 173, 0.3));
+    } */
+
+    /* ── CHIPS ── */
+    .chip {
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .chip:hover {
+      background: #e4d0ff;
+      border-color: var(--border-strong);
+      transform: scale(1.04);
+    }
+
+    .chip.logout {
+      background: #fff0f0;
+      color: #c0392b;
+      border-color: #f5c6c6;
+    }
+
+    .chip.logout:hover {
+      background: #ffe0e0;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow);
+    }
+
+    .is-hidden {
+      display: none !important;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* ── PROMO TEXT ── */
+    .promo-title {
+      margin: 0 0 6px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .promo-meta {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* ── TAGS ── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background: linear-gradient(135deg, #ead5ff, #f5eaff);
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+
+    /* ── PROMO LIST / ITEMS ── */
+    .promo-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .promo-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, #fbf7ff, #f8f0ff);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .promo-item:hover {
+      background: linear-gradient(135deg, #f3e8ff, #ecdeff);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .promo-item:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .promo-thumb {
+      width: 76px;
+      height: 76px;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      font-size: 36px;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .promo-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius);
+    }
+
+    .thumb-a {
+      background: linear-gradient(135deg, #e8caff, #d4aaff);
+    }
+
+    .thumb-b {
+      background: linear-gradient(135deg, #d5b8ff, #c4a0f0);
+    }
+
+    .thumb-c {
+      background: linear-gradient(135deg, #ead5ff, #dbbfff);
+    }
+
+    .thumb-d {
+      background: linear-gradient(135deg, #e0c8ff, #cdb0f0);
+    }
+
+    .promo-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .promo-body h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .promo-offer {
+      margin: 0;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+
+    .promo-distance {
+      margin: 5px 0 0;
+      color: var(--muted-light);
+      font-size: 13px;
+    }
+
+    .promo-icon {
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    /* ── BOOKMARK ── */
+    .bookmark {
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 22px;
+      transition: all var(--transition);
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .bookmark:hover {
+      color: var(--accent);
+      transform: scale(1.2);
+      background: rgba(154, 61, 219, 0.08);
+    }
+
+    .bookmark.active {
+      color: var(--primary);
+      filter: drop-shadow(0 0 4px rgba(106, 13, 173, 0.4));
+    }
+
+    /* ── INPUTS ── */
+    .input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 13px 14px;
+      font: 500 15px/1.4 'Inter', 'Segoe UI', sans-serif;
+      margin-top: 6px;
+      color: var(--text);
+      background: #faf7ff;
+      transition: all var(--transition);
+      outline: none;
+    }
+
+    .input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(106, 13, 173, 0.12);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(216, 196, 245, 0.7);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      z-index: 30;
+      box-shadow: 0 -4px 20px rgba(106, 13, 173, 0.10);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    .bottom-nav a {
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: color var(--transition), background var(--transition);
+      border-radius: 12px;
+      margin: 6px 3px;
+    }
+
+    .bottom-nav a:hover {
+      color: var(--primary);
+      background: rgba(106, 13, 173, 0.06);
+    }
+
+    .bottom-nav a.active {
+      color: var(--primary);
+      font-weight: 700;
+      background: rgba(106, 13, 173, 0.09);
+    }
+
+    .bottom-nav .nav-emoji {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .bottom-nav .nav-label {
+      font-size: 10.5px;
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── HERO BANNER ── */
+    .hero {
+      background: linear-gradient(145deg, #8b1fe8 0%, #5a08a0 50%, #2d0455 100%);
+      color: #fff;
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 40px rgba(106, 13, 173, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(200, 130, 255, 0.3) 0%, transparent 70%);
+      top: -40px;
+      right: -40px;
+      border-radius: 50%;
+    }
+
+    /* ── HOME GREETING ── */
+    .home-greeting {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .home-greeting h2 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .home-greeting p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .bell {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #ead5ff, #d8b8ff);
+      font-size: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .bell:hover {
+      transform: scale(1.08) rotate(8deg);
+      box-shadow: var(--shadow);
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      border: 1.5px solid var(--border);
+      background: linear-gradient(135deg, #f7f0ff, #f0e8ff);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .location-title {
+      margin: 0 0 4px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .location-link {
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .location-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ── SEARCH TILE ── */
+    .search-tile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1.5px solid var(--border);
+      background: linear-gradient(135deg, #f7f0ff, #f3eaff);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-size: 15px;
+      font-weight: 500;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+    }
+
+    .search-tile:hover {
+      background: linear-gradient(135deg, #eeddff, #e6d5ff);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    /* ── QUICK CATEGORIES ── */
+    .quick-cats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .quick-cats a {
+      text-align: center;
+    }
+
+    .quick-cats span {
+      display: grid;
+      place-items: center;
+      height: 58px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #ead5ff, #dbbfff);
+      font-size: 26px;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+      border: 1px solid rgba(216, 196, 245, 0.5);
+    }
+
+    .quick-cats a:hover span {
+      background: linear-gradient(135deg, #d8b8ff, #c9a0f5);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .quick-cats small {
+      display: block;
+      margin-top: 7px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    /* ── SECTION HEAD ── */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-head h3 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .section-head a {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .section-head a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── PROMO CARD (home) ── */
+    .promo-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .promo-emoji {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #e8caff, #d4aaff);
+      font-size: 30px;
+      box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
+    }
+
+    /* ── SEARCH BOX ── */
+    .search-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-box .input {
+      margin-top: 0;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 86px;
+      transform: translateX(-50%) translateY(20px);
+      background: linear-gradient(135deg, #3d0870, #2d0060);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 40;
+      box-shadow: 0 8px 24px rgba(106, 13, 173, 0.35);
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (min-width: 768px) {
+      .app {
+        margin: 24px auto;
+        min-height: calc(100vh - 48px);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .home-greeting h2 {
+        font-size: 26px;
+      }
+
+      .home-greeting p {
+        font-size: 14px;
+      }
+
+      .promo-body h3 {
+        font-size: 15px;
+      }
+
+      .promo-offer {
+        font-size: 14px;
+      }
+
+      .promo-distance {
+        font-size: 12px;
+      }
+
+      .promo-icon {
+        font-size: 18px;
+      }
+    }
+
+    /* ── SCROLLBAR STYLING ── */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 4px;
+    }
+
+    /* ── SELECTION ── */
+    ::selection {
+      background: rgba(106, 13, 173, 0.2);
+    }
+
+    /* ── PAGE TRANSITION ANIMATION ── */
+    [data-page]:not([hidden])>.app {
+      animation: pageIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── FLOATING CARD DEPTH ── */
+    .card+.promo-list .promo-item:first-child {
+      margin-top: 0;
+    }
+
+    /* ── HD BADGE ON SPLASH ── */
+    .hd-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* ── INPUT GROUP SPACING ── */
+    .card form>label+label {
+      margin-top: 4px;
+    }
+
+    .card .btn-block {
+      margin-top: 8px;
+    }
+
+    .card .muted {
+      margin: 12px 0 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div data-page="splash">
+    <main class="splash">
+      <section>
+        <div class="logo" aria-hidden="true">
+          <img src="logoa.jpg">
+        </div>
+        <div class="hd-badge">✦ HD MODE</div>
+        <h1 class="title">Student Saver</h1>
+        <p class="subtitle">Find the best student promos around you.</p>
+        <p><a class="btn btn-secondary" href="#" data-go="login">Get Started</a></p>
+      </section>
+    </main>
+  </div>
+  <div data-page="login" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand">
+          <div class="brand-img-holder">
+            <img src="logoa.jpg">
+          </div>
+          <span>Sign In</span>
+        </h1>
+        <a class="chip" href="#" data-go="splash">Back</a>
+      </header>
+      <main class="content">
+        <section class="card">
+          <h2 class="promo-title">Welcome back</h2>
+          <p class="promo-meta">Use your school email to continue.</p>
+          <form onsubmit="submitMockForm(event,&quot;Signed in successfully&quot;)">
+            <label>Student Email<input class="input" type="email" placeholder="you@school.edu" required /></label>
+            <label>Password<input class="input" type="password" placeholder="password" required /></label>
+            <button class="btn btn-primary btn-block" type="submit">Sign In</button>
+          </form>
+          <p class="muted">After signing in, go to the home page.</p>
+          <a class="btn btn-secondary btn-block" href="#" data-go="home">Continue to Home</a>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div data-page="home" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand">
+          <div class="brand-img-holder">
+            <img src="logoa.jpg">
+          </div>
+          <span>Student Saver</span>
+        </h1>
+        <div class="header-actions">
+          <a class="chip" href="#" data-go="my-id">My ID</a>
+          <a class="chip logout" href="#" data-go="login">Log out</a>
+        </div>
+      </header>
+      <main class="content">
+        <section class="home-greeting">
+          <div>
+            <h2>Hi, Student! 👋</h2>
+            <p>Tipid starts with smart choices.</p>
+          </div>
+          <span class="bell">🔔</span>
+        </section>
+
+        <section class="info-box">
+          <div>
+            <p class="location-title">📍 Near NEUST</p>
+            <a class="location-link" href="#" data-go="search">Change Location</a>
+          </div>
+          <span class="muted">◎</span>
+        </section>
+
+        <a class="search-tile" href="#" data-go="search">🔎 Search promos or stores...</a>
+
+        <section class="quick-cats" aria-label="Quick categories">
+          <a href="#" data-go="category" data-category="food"><span>🍱</span><small>Food</small></a>
+          <a href="#" data-go="search"><span>☕</span><small>Cafe</small></a>
+          <a href="#" data-go="category" data-category="tech"><span>🖨️</span><small>Printing</small></a>
+          <a href="#" data-go="search"><span>📚</span><small>School Supplies</small></a>
+          <a href="#" data-go="search"><span>🛒</span><small>Grocery</small></a>
+        </section>
+
+        <div class="section-head">
+          <h3>Top Promos Near You</h3>
+          <a href="#" data-go="category">See All</a>
+        </div>
+
+        <article class="card promo-card">
+          <div class="row">
+            <div>
+              <h3 class="promo-title">Ate Liza Karinderya</h3>
+              <p class="promo-offer">₱10 OFF with Student ID</p>
+              <p class="promo-distance">📍 150m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="food-ate-liza"
+              onclick="toggleBookmark('food-ate-liza')">☆</button>
+          </div>
+          <div class="promo-emoji">🍲</div>
+        </article>
+
+        <article class="card promo-card">
+          <div class="row">
+            <div>
+              <h3 class="promo-title">Print & Save Shop</h3>
+              <p class="promo-offer">Buy 1 Get 1 Photocopy</p>
+              <p class="promo-distance">📍 200m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="tech-print-save"
+              onclick="toggleBookmark('tech-print-save')">☆</button>
+          </div>
+          <div class="promo-emoji">🖨️</div>
+        </article>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a class="active" href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="category" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Categories</span></h1><a
+          class="chip" href="#" data-go="post-promo">Post</a>
+      </header>
+      <main class="content">
+        <section class="card">
+          <h2 class="promo-title">Browse by Category</h2>
+          <div class="grid-2">
+            <a class="btn btn-primary" href="#" data-category-btn="food">Food</a>
+            <a class="btn btn-secondary" href="#" data-category-btn="cafe">Cafe</a>
+            <a class="btn btn-secondary" href="#" data-category-btn="printing">Printing</a>
+            <a class="btn btn-secondary" href="#" data-category-btn="school-supplies">School Supplies</a>
+            <a class="btn btn-secondary" href="#" data-category-btn="grocery">Grocery</a>
+            <a class="btn btn-secondary" href="#" data-category-btn="fashion">Fashion</a>
+            <a class="btn btn-secondary" href="#" data-category-btn="tech">Tech</a>
+            <a class="btn btn-secondary" href="#" data-category-btn="transport">Transport</a>
+          </div>
+        </section>
+
+        <section class="card" data-category-block="food">
+          <h2 class="promo-title">Food</h2>
+          <p class="muted">Student-friendly meal deals near campus.</p>
+        </section>
+        <section id="food-list" class="promo-list" data-category-block="food" aria-label="Food promos">
+          <a class="promo-item" href="#" data-go="food-ate-liza">
+            <div class="promo-thumb thumb-a" aria-hidden="true">🍲</div>
+            <div class="promo-body">
+              <h3>Ate Liza Karinderya</h3>
+              <p class="promo-offer">₱10 OFF with Student ID</p>
+              <p class="promo-distance">📍 150m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="food-ate-liza"
+              onclick="toggleBookmarkFromEvent(event, 'food-ate-liza')" aria-label="Save Ate Liza promo">
+              ☆
+            </button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="food-kuya-j">
+            <div class="promo-thumb thumb-b" aria-hidden="true">🍜</div>
+            <div class="promo-body">
+              <h3>Kuya J Meals</h3>
+              <p class="promo-offer">Student Meal Combo ₱99 only</p>
+              <p class="promo-distance">📍 180m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="food-kuya-j"
+              onclick="toggleBookmarkFromEvent(event, 'food-kuya-j')" aria-label="Save Kuya J promo">
+              ☆
+            </button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="food-tita-m">
+            <div class="promo-thumb thumb-c" aria-hidden="true">🍽️</div>
+            <div class="promo-body">
+              <h3>Tita M's Eatery</h3>
+              <p class="promo-offer">5% OFF with Student ID</p>
+              <p class="promo-distance">📍 220m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="food-tita-m"
+              onclick="toggleBookmarkFromEvent(event, 'food-tita-m')" aria-label="Save Tita M promo">
+              ☆
+            </button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="food-campus-tapsi">
+            <div class="promo-thumb thumb-d" aria-hidden="true">🫖</div>
+            <div class="promo-body">
+              <h3>Campus Tapsi</h3>
+              <p class="promo-offer">Free Iced Tea for students</p>
+              <p class="promo-distance">📍 250m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="food-campus-tapsi"
+              onclick="toggleBookmarkFromEvent(event, 'food-campus-tapsi')" aria-label="Save Campus Tapsi promo">
+              ☆
+            </button>
+          </a>
+        </section>
+
+        <section class="card is-hidden" data-category-block="cafe">
+          <h2 class="promo-title">Cafe</h2>
+          <p class="muted">Coffee and study-friendly cafe promos.</p>
+        </section>
+        <section id="cafe-list" class="promo-list is-hidden" data-category-block="cafe" aria-label="Cafe promos">
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-b" aria-hidden="true">☕</div>
+            <div class="promo-body">
+              <h3>Brew Corner</h3>
+              <p class="promo-offer">Buy 1 Get 1 Iced Coffee</p>
+              <p class="promo-distance">📍 160m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="cafe-brew-corner"
+              onclick="toggleBookmarkFromEvent(event, 'cafe-brew-corner')"
+              aria-label="Save Brew Corner promo">☆</button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-a" aria-hidden="true">🍵</div>
+            <div class="promo-body">
+              <h3>Daily Grind Cafe</h3>
+              <p class="promo-offer">Free add-on syrup for students</p>
+              <p class="promo-distance">📍 240m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="cafe-daily-grind"
+              onclick="toggleBookmarkFromEvent(event, 'cafe-daily-grind')"
+              aria-label="Save Daily Grind promo">☆</button>
+          </a>
+        </section>
+
+        <section class="card is-hidden" data-category-block="printing">
+          <h2 class="promo-title">Printing</h2>
+          <p class="muted">Affordable print and copy services near school.</p>
+        </section>
+        <section id="printing-list" class="promo-list is-hidden" data-category-block="printing"
+          aria-label="Printing promos">
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-c" aria-hidden="true">🖨️</div>
+            <div class="promo-body">
+              <h3>Print & Save Shop</h3>
+              <p class="promo-offer">Buy 1 Get 1 photocopy</p>
+              <p class="promo-distance">📍 200m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="printing-save-shop"
+              onclick="toggleBookmarkFromEvent(event, 'printing-save-shop')"
+              aria-label="Save Print & Save promo">☆</button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-d" aria-hidden="true">📄</div>
+            <div class="promo-body">
+              <h3>NEUST Print Hub</h3>
+              <p class="promo-offer">10 pages free every 100 pages</p>
+              <p class="promo-distance">📍 320m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="printing-neust-hub"
+              onclick="toggleBookmarkFromEvent(event, 'printing-neust-hub')"
+              aria-label="Save NEUST Print Hub promo">☆</button>
+          </a>
+        </section>
+
+        <section class="card is-hidden" data-category-block="school-supplies">
+          <h2 class="promo-title">School Supplies</h2>
+          <p class="muted">Discounts on notebooks, pens, and study kits.</p>
+        </section>
+        <section id="school-supplies-list" class="promo-list is-hidden" data-category-block="school-supplies"
+          aria-label="School supplies promos">
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-a" aria-hidden="true">📚</div>
+            <div class="promo-body">
+              <h3>Study Needs Depot</h3>
+              <p class="promo-offer">15% OFF notebooks & binders</p>
+              <p class="promo-distance">📍 280m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="school-study-needs"
+              onclick="toggleBookmarkFromEvent(event, 'school-study-needs')"
+              aria-label="Save Study Needs promo">☆</button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-b" aria-hidden="true">✏️</div>
+            <div class="promo-body">
+              <h3>Campus Paper Co.</h3>
+              <p class="promo-offer">Free pen set with minimum ₱200</p>
+              <p class="promo-distance">📍 390m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="school-paper-co"
+              onclick="toggleBookmarkFromEvent(event, 'school-paper-co')"
+              aria-label="Save Campus Paper Co promo">☆</button>
+          </a>
+        </section>
+
+        <section class="card is-hidden" data-category-block="grocery">
+          <h2 class="promo-title">Grocery</h2>
+          <p class="muted">Everyday essentials with student savings.</p>
+        </section>
+        <section id="grocery-list" class="promo-list is-hidden" data-category-block="grocery"
+          aria-label="Grocery promos">
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-d" aria-hidden="true">🛒</div>
+            <div class="promo-body">
+              <h3>Mini Mart Plus</h3>
+              <p class="promo-offer">5% OFF every Tuesday</p>
+              <p class="promo-distance">📍 430m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="grocery-mini-mart"
+              onclick="toggleBookmarkFromEvent(event, 'grocery-mini-mart')" aria-label="Save Mini Mart promo">☆</button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-c" aria-hidden="true">🥫</div>
+            <div class="promo-body">
+              <h3>Fresh Basket</h3>
+              <p class="promo-offer">₱50 OFF on purchases above ₱700</p>
+              <p class="promo-distance">📍 520m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="grocery-fresh-basket"
+              onclick="toggleBookmarkFromEvent(event, 'grocery-fresh-basket')"
+              aria-label="Save Fresh Basket promo">☆</button>
+          </a>
+        </section>
+
+        <section class="card is-hidden" data-category-block="fashion">
+          <h2 class="promo-title">Fashion</h2>
+          <p class="muted">Outfit and accessory discounts for students.</p>
+        </section>
+        <section id="fashion-list" class="promo-list is-hidden" data-category-block="fashion"
+          aria-label="Fashion promos">
+          <a class="promo-item" href="#" data-go="store-profile">
+            <div class="promo-thumb thumb-b" aria-hidden="true">👕</div>
+            <div class="promo-body">
+              <h3>Trend Hub Apparel</h3>
+              <p class="promo-offer">20% OFF all tops</p>
+              <p class="promo-distance">📍 300m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="fashion-trend-hub"
+              onclick="toggleBookmarkFromEvent(event, 'fashion-trend-hub')" aria-label="Save Trend Hub promo">☆</button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="store-profile">
+            <div class="promo-thumb thumb-c" aria-hidden="true">👟</div>
+            <div class="promo-body">
+              <h3>Campus Kicks</h3>
+              <p class="promo-offer">Buy 1 get 30% on 2nd pair</p>
+              <p class="promo-distance">📍 420m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="fashion-campus-kicks"
+              onclick="toggleBookmarkFromEvent(event, 'fashion-campus-kicks')"
+              aria-label="Save Campus Kicks promo">☆</button>
+          </a>
+        </section>
+
+        <section class="card is-hidden" data-category-block="tech">
+          <h2 class="promo-title">Tech</h2>
+          <p class="muted">Gadgets and study essentials with student promos.</p>
+        </section>
+        <section id="tech-list" class="promo-list is-hidden" data-category-block="tech" aria-label="Tech promos">
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-d" aria-hidden="true">💻</div>
+            <div class="promo-body">
+              <h3>Byte Zone</h3>
+              <p class="promo-offer">15% OFF accessories</p>
+              <p class="promo-distance">📍 500m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="tech-byte-zone"
+              onclick="toggleBookmarkFromEvent(event, 'tech-byte-zone')" aria-label="Save Byte Zone promo">☆</button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-a" aria-hidden="true">⌨️</div>
+            <div class="promo-body">
+              <h3>Study Station</h3>
+              <p class="promo-offer">Free mouse pad with keyboard</p>
+              <p class="promo-distance">📍 650m away</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="tech-study-station"
+              onclick="toggleBookmarkFromEvent(event, 'tech-study-station')"
+              aria-label="Save Study Station promo">☆</button>
+          </a>
+        </section>
+
+        <section class="card is-hidden" data-category-block="transport">
+          <h2 class="promo-title">Transport</h2>
+          <p class="muted">Save on rides and student commute options.</p>
+        </section>
+        <section id="transport-list" class="promo-list is-hidden" data-category-block="transport"
+          aria-label="Transport promos">
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-c" aria-hidden="true">🛵</div>
+            <div class="promo-body">
+              <h3>RideGo</h3>
+              <p class="promo-offer">₱25 OFF first 3 rides</p>
+              <p class="promo-distance">📍 App-based</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="transport-ridego"
+              onclick="toggleBookmarkFromEvent(event, 'transport-ridego')" aria-label="Save RideGo promo">☆</button>
+          </a>
+
+          <a class="promo-item" href="#" data-go="promo-detail">
+            <div class="promo-thumb thumb-b" aria-hidden="true">🚌</div>
+            <div class="promo-body">
+              <h3>Campus Shuttle Pass</h3>
+              <p class="promo-offer">10% OFF monthly pass</p>
+              <p class="promo-distance">📍 Main terminal</p>
+            </div>
+            <button class="bookmark promo-icon" data-bookmark-id="transport-shuttle-pass"
+              onclick="toggleBookmarkFromEvent(event, 'transport-shuttle-pass')"
+              aria-label="Save Shuttle Pass promo">☆</button>
+          </a>
+        </section>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a class="active" href="#"
+          data-go="category"><span class="nav-emoji" aria-hidden="true">📂</span><span
+            class="nav-label">Category</span></a><a href="#" data-go="saved"><span class="nav-emoji"
+            aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a href="#" data-go="search"><span
+            class="nav-emoji" aria-hidden="true">🔍</span><span class="nav-label">Search</span></a><a href="#"
+          data-go="my-id"><span class="nav-emoji" aria-hidden="true">📇</span><span class="nav-label">My ID</span></a>
+      </nav>
+    </div>
+  </div>
+  <div data-page="saved" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Saved Promos</span></h1><a
+          class="chip" href="#" data-go="home">Explore</a>
+      </header>
+      <main class="content">
+        <article class="card" data-saved-item="promo-coffee">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">50% Off Coffee</h2>
+              <p class="promo-meta">Bean Scene Cafe</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="promo-coffee" onclick="toggleBookmark('promo-coffee')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="promo-sports">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">30% Off Sportswear</h2>
+              <p class="promo-meta">Peak Athletics</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="promo-sports" onclick="toggleBookmark('promo-sports')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="store-profile">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="tech-print-save">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Print &amp; Save Shop</h2>
+              <p class="promo-meta">Buy 1 Get 1 Photocopy</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="tech-print-save"
+              onclick="toggleBookmark('tech-print-save')">â˜†</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+        <article class="card" data-saved-item="food-ate-liza">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Ate Liza Karinderya</h2>
+              <p class="promo-meta">₱10 OFF with Student ID</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-ate-liza"
+              onclick="toggleBookmark('food-ate-liza')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="food-ate-liza">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="food-kuya-j">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Kuya J Meals</h2>
+              <p class="promo-meta">Student Meal Combo ₱99 only</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-kuya-j" onclick="toggleBookmark('food-kuya-j')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="food-kuya-j">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="food-tita-m">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Tita M's Eatery</h2>
+              <p class="promo-meta">5% OFF with Student ID</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-tita-m" onclick="toggleBookmark('food-tita-m')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="food-tita-m">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="food-campus-tapsi">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Campus Tapsi</h2>
+              <p class="promo-meta">Free Iced Tea for students</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-campus-tapsi"
+              onclick="toggleBookmark('food-campus-tapsi')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="food-campus-tapsi">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="fashion-trend-hub">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Trend Hub Apparel</h2>
+              <p class="promo-meta">20% OFF all tops</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="fashion-trend-hub"
+              onclick="toggleBookmark('fashion-trend-hub')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="store-profile">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="fashion-campus-kicks">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Campus Kicks</h2>
+              <p class="promo-meta">Buy 1 get 30% on 2nd pair</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="fashion-campus-kicks"
+              onclick="toggleBookmark('fashion-campus-kicks')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="store-profile">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="tech-byte-zone">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Byte Zone</h2>
+              <p class="promo-meta">15% OFF accessories</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="tech-byte-zone"
+              onclick="toggleBookmark('tech-byte-zone')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="tech-study-station">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Study Station</h2>
+              <p class="promo-meta">Free mouse pad with keyboard</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="tech-study-station"
+              onclick="toggleBookmark('tech-study-station')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="transport-ridego">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">RideGo</h2>
+              <p class="promo-meta">₱25 OFF first 3 rides</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="transport-ridego"
+              onclick="toggleBookmark('transport-ridego')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="transport-shuttle-pass">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Campus Shuttle Pass</h2>
+              <p class="promo-meta">10% OFF monthly pass</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="transport-shuttle-pass"
+              onclick="toggleBookmark('transport-shuttle-pass')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="cafe-brew-corner">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Brew Corner</h2>
+              <p class="promo-meta">Buy 1 Get 1 Iced Coffee</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="cafe-brew-corner"
+              onclick="toggleBookmark('cafe-brew-corner')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="cafe-daily-grind">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Daily Grind Cafe</h2>
+              <p class="promo-meta">Free add-on syrup for students</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="cafe-daily-grind"
+              onclick="toggleBookmark('cafe-daily-grind')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="printing-save-shop">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Print & Save Shop</h2>
+              <p class="promo-meta">Buy 1 Get 1 photocopy</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="printing-save-shop"
+              onclick="toggleBookmark('printing-save-shop')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="printing-neust-hub">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">NEUST Print Hub</h2>
+              <p class="promo-meta">10 pages free every 100 pages</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="printing-neust-hub"
+              onclick="toggleBookmark('printing-neust-hub')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="school-study-needs">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Study Needs Depot</h2>
+              <p class="promo-meta">15% OFF notebooks & binders</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="school-study-needs"
+              onclick="toggleBookmark('school-study-needs')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="school-paper-co">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Campus Paper Co.</h2>
+              <p class="promo-meta">Free pen set with minimum ₱200</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="school-paper-co"
+              onclick="toggleBookmark('school-paper-co')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="grocery-mini-mart">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Mini Mart Plus</h2>
+              <p class="promo-meta">5% OFF every Tuesday</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="grocery-mini-mart"
+              onclick="toggleBookmark('grocery-mini-mart')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <article class="card" data-saved-item="grocery-fresh-basket">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Fresh Basket</h2>
+              <p class="promo-meta">₱50 OFF on purchases above ₱700</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="grocery-fresh-basket"
+              onclick="toggleBookmark('grocery-fresh-basket')">☆</button>
+          </div>
+          <a class="btn btn-secondary" href="#" data-go="promo-detail">Open</a>
+        </article>
+
+        <p class="muted">Only bookmarked promos are shown.</p>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a class="active"
+          href="#" data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span
+            class="nav-label">Saved</span></a><a href="#" data-go="search"><span class="nav-emoji"
+            aria-hidden="true">🔍</span><span class="nav-label">Search</span></a><a href="#" data-go="my-id"><span
+            class="nav-emoji" aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="search" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Search Promos</span></h1><a
+          class="chip" href="#" data-go="home">Home</a>
+      </header>
+      <main class="content">
+        <section class="card">
+          <form>
+            <div class="search-box">
+              <input class="input" type="search" placeholder="Try: coffee, tech, burger..." />
+              <button class="btn btn-primary" type="submit">Go</button>
+            </div>
+          </form>
+        </section>
+        <section class="card">
+          <h2 class="promo-title">Suggestions</h2>
+          <div class="tags">
+            <a class="tag" href="#" data-go="promo-detail">Coffee Deals</a>
+            <a class="tag" href="#" data-go="promo-detail">Meal Bundles</a>
+            <a class="tag" href="#" data-go="store-profile">Gym Offers</a>
+          </div>
+        </section>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          class="active" href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="my-id" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>My Student ID</span></h1>
+        <div class="header-actions">
+          <a class="chip" href="#" data-go="home">Home</a>
+          <a class="chip logout" href="#" data-go="login">Log out</a>
+        </div>
+      </header>
+      <main class="content">
+        <section class="card">
+          <h2 class="promo-title">John Student</h2>
+          <p class="promo-meta">University of City - BS Information Technology</p>
+          <p><strong>ID Number:</strong> 2026-00123</p>
+          <p><strong>Status:</strong> Verified</p>
+          <p class="muted">Use this page to verify your student identity at partner stores.</p>
+        </section>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a class="active" href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="post-promo" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Post Promo</span></h1><a
+          class="chip" href="#" data-go="category">Back</a>
+      </header>
+      <main class="content">
+        <section class="card">
+          <form onsubmit="submitMockForm(event,'Promo submitted for review')">
+            <label>
+              Promo Title
+              <input class="input" type="text" required placeholder="e.g. 20% Off Rice Meals" />
+            </label>
+            <label>
+              Store Name
+              <input class="input" type="text" required placeholder="Store or brand name" />
+            </label>
+            <label>
+              Category
+              <select required>
+                <option value="">Select category</option>
+                <option>Food</option>
+                <option>Fashion</option>
+                <option>Tech</option>
+              </select>
+            </label>
+            <label>
+              Promo Details
+              <textarea rows="4" required placeholder="Describe terms and validity"></textarea>
+            </label>
+            <button class="btn btn-primary btn-block" type="submit">Submit Promo</button>
+          </form>
+        </section>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="promo-detail" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Promo Detail</span></h1><a
+          class="chip" href="#" data-go="home">Back</a>
+      </header>
+      <main class="content">
+        <article class="card">
+          <div class="row">
+            <h2 class="promo-title">50% Off Coffee</h2>
+            <button class="bookmark" data-bookmark-id="promo-coffee" onclick="toggleBookmark('promo-coffee')">☆</button>
+          </div>
+          <p class="promo-meta">Bean Scene Cafe</p>
+          <p>Show your student ID to enjoy 50% off any medium coffee every weekday from 1 PM to 5 PM.</p>
+          <p class="muted">Valid until: June 30, 2026</p>
+          <div class="tags">
+            <span class="tag">Food</span>
+            <span class="tag">Coffee</span>
+            <span class="tag">Weekdays</span>
+          </div>
+          <p><a class="btn btn-primary" href="#" data-go="store-profile">View Store Profile</a></p>
+        </article>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="store-profile" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Store Profile</span></h1><a
+          class="chip" href="#" data-go="home">Back</a>
+      </header>
+      <main class="content">
+        <section class="card">
+          <h2 class="promo-title">Bean Scene Cafe</h2>
+          <p class="promo-meta">123 University Ave, City Center</p>
+          <p class="muted">Open daily 8:00 AM - 10:00 PM</p>
+          <p>Popular with students for study-friendly spaces and affordable drinks.</p>
+        </section>
+
+        <article class="card">
+          <div class="row">
+            <div>
+              <h3 class="promo-title">Buy 1 Get 1 Iced Latte</h3>
+              <p class="promo-meta">Until June 12</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="promo-latte" onclick="toggleBookmark('promo-latte')">☆</button>
+          </div>
+        </article>
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="food-ate-liza" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Food Promo</span></h1><a
+          class="chip" href="#" data-go="category" data-category="food">Back</a>
+      </header>
+      <main class="content">
+
+        <article class="card">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Ate Liza Karinderya</h2>
+              <p class="promo-meta">📍 150m away</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-ate-liza"
+              onclick="toggleBookmark('food-ate-liza')">☆</button>
+          </div>
+          <p><strong>Offer:</strong> ₱10 OFF with Student ID</p>
+          <p><strong>Best-sellers:</strong> Adobo rice meal, sinigang bowl, and lumpia set.</p>
+          <p class="muted">Valid every Monday to Friday, 10:00 AM - 7:00 PM.</p>
+        </article>
+
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="food-kuya-j" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Food Promo</span></h1><a
+          class="chip" href="#" data-go="category" data-category="food">Back</a>
+      </header>
+      <main class="content">
+
+        <article class="card">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Kuya J Meals</h2>
+              <p class="promo-meta">📍 180m away</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-kuya-j" onclick="toggleBookmark('food-kuya-j')">☆</button>
+          </div>
+          <p><strong>Offer:</strong> Student Meal Combo ₱99 only</p>
+          <p><strong>Inclusions:</strong> 1 rice meal, 1 side dish, and 1 regular drink.</p>
+          <p class="muted">Promo available daily from 11:00 AM - 3:00 PM.</p>
+        </article>
+
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="food-tita-m" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Food Promo</span></h1><a
+          class="chip" href="#" data-go="category" data-category="food">Back</a>
+      </header>
+      <main class="content">
+
+        <article class="card">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Tita M's Eatery</h2>
+              <p class="promo-meta">📍 220m away</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-tita-m" onclick="toggleBookmark('food-tita-m')">☆</button>
+          </div>
+          <p><strong>Offer:</strong> 5% OFF with Student ID</p>
+          <p><strong>Popular dishes:</strong> Sisig plate, chicken curry, and halo-halo.</p>
+          <p class="muted">Valid on dine-in orders with minimum spend of ₱120.</p>
+        </article>
+
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <div data-page="food-campus-tapsi" hidden>
+    <div class="app">
+      <header class="topbar">
+        <h1 class="brand"><span class="brand-logo-emoji" aria-hidden="true">🎓</span><span>Food Promo</span></h1><a
+          class="chip" href="#" data-go="category" data-category="food">Back</a>
+      </header>
+      <main class="content">
+
+        <article class="card">
+          <div class="row">
+            <div>
+              <h2 class="promo-title">Campus Tapsi</h2>
+              <p class="promo-meta">📍 250m away</p>
+            </div>
+            <button class="bookmark" data-bookmark-id="food-campus-tapsi"
+              onclick="toggleBookmark('food-campus-tapsi')">☆</button>
+          </div>
+          <p><strong>Offer:</strong> Free Iced Tea for students</p>
+          <p><strong>Menu picks:</strong> Tapsilog, longsilog, and tocino silog meals.</p>
+          <p class="muted">One free iced tea per student meal purchase.</p>
+        </article>
+
+      </main>
+      <nav class="bottom-nav" aria-label="Primary"><a href="#" data-go="home"><span class="nav-emoji"
+            aria-hidden="true">🏠</span><span class="nav-label">Home</span></a><a href="#" data-go="category"><span
+            class="nav-emoji" aria-hidden="true">📂</span><span class="nav-label">Category</span></a><a href="#"
+          data-go="saved"><span class="nav-emoji" aria-hidden="true">❤</span><span class="nav-label">Saved</span></a><a
+          href="#" data-go="search"><span class="nav-emoji" aria-hidden="true">🔍</span><span
+            class="nav-label">Search</span></a><a href="#" data-go="my-id"><span class="nav-emoji"
+            aria-hidden="true">📇</span><span class="nav-label">My ID</span></a></nav>
+    </div>
+  </div>
+  <script>
+    const STORAGE_KEY = "studentSaverBookmarks";
+
+    function getBookmarks() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function setBookmarks(ids) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    }
+
+    function toggleBookmark(id) {
+      const bookmarks = getBookmarks();
+      const idx = bookmarks.indexOf(id);
+      const added = idx === -1;
+
+      if (added) {
+        bookmarks.push(id);
+      } else {
+        bookmarks.splice(idx, 1);
+      }
+      setBookmarks(bookmarks);
+      renderBookmarks();
+      showToast(added ? "Promo saved" : "Promo removed");
+    }
+
+    function toggleBookmarkFromEvent(event, id) {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleBookmark(id);
+    }
+
+    function renderBookmarks() {
+      const bookmarks = getBookmarks();
+      document.querySelectorAll("[data-bookmark-id]").forEach((button) => {
+        const id = button.getAttribute("data-bookmark-id");
+        const active = bookmarks.includes(id);
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+        button.textContent = active ? "★" : "☆";
+      });
+
+      const savedOnly = document.querySelectorAll("[data-saved-item]");
+      if (savedOnly.length) {
+        savedOnly.forEach((item) => {
+          const id = item.getAttribute("data-saved-item");
+          item.style.display = bookmarks.includes(id) ? "block" : "none";
+        });
+      }
+    }
+
+    function showToast(message) {
+      let toast = document.getElementById("toast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast";
+        toast.className = "toast";
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 1700);
+    }
+
+    function submitMockForm(event, message) {
+      event.preventDefault();
+      showToast(message);
+    }
+
+    function initCategoryFilter() {
+      const buttons = Array.from(document.querySelectorAll("[data-category-btn]"));
+      if (!buttons.length) {
+        return;
+      }
+
+      const blocks = Array.from(document.querySelectorAll("[data-category-block]"));
+
+      const showCategory = (category) => {
+        blocks.forEach((block) => {
+          const matches = block.getAttribute("data-category-block") === category;
+          block.classList.toggle("is-hidden", !matches);
+        });
+
+        buttons.forEach((button) => {
+          const isActive = button.getAttribute("data-category-btn") === category;
+          button.classList.toggle("btn-primary", isActive);
+          button.classList.toggle("btn-secondary", !isActive);
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          showCategory(button.getAttribute("data-category-btn"));
+        });
+      });
+    }
+
+    function applyCategoryFilter(category) {
+      const buttons = Array.from(document.querySelectorAll("[data-category-btn]"));
+      const blocks = Array.from(document.querySelectorAll("[data-category-block]"));
+      blocks.forEach(function (block) {
+        const matches = block.getAttribute("data-category-block") === category;
+        block.classList.toggle("is-hidden", !matches);
+      });
+      buttons.forEach(function (button) {
+        const isActive = button.getAttribute("data-category-btn") === category;
+        button.classList.toggle("btn-primary", isActive);
+        button.classList.toggle("btn-secondary", !isActive);
+      });
+    }
+
+    function initCategoryFilter() {
+      const buttons = Array.from(document.querySelectorAll("[data-category-btn]"));
+      buttons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+          event.preventDefault();
+          applyCategoryFilter(button.getAttribute("data-category-btn"));
+        });
+      });
+    }
+
+    function showPage(id) {
+      document.querySelectorAll("[data-page]").forEach(function (el) {
+        el.hidden = el.getAttribute("data-page") !== id;
+      });
+      window.scrollTo(0, 0);
+      renderBookmarks();
+    }
+
+    document.addEventListener("click", function (e) {
+      const el = e.target.closest("[data-go]");
+      if (!el) return;
+      const dest = el.getAttribute("data-go");
+      if (!dest) return;
+      e.preventDefault();
+      const cat = el.getAttribute("data-category");
+      showPage(dest);
+      if (cat) applyCategoryFilter(cat);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      renderBookmarks();
+      initCategoryFilter();
+    });
+  </script>
+</body>
+
+</html>
